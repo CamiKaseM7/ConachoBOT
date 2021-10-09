@@ -1,6 +1,6 @@
 # ConachoBOT
-This is a "spy bot" for twitch using the tmi.js library
-it prints on the console every message of the target on channels that he follows.
+This is a "spy bot" for twitch using the tmi.js library. <br>
+It prints on the console every message of the target on channels that he follows.
 
 ## How to use
 ### Installation
