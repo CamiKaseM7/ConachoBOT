@@ -1,12 +1,24 @@
 const fetch = require("node-fetch");
+const fs = require("fs");
 const sleep = require("./sleep");
+const generateBearerToken = require("./generateBearerToken");
 require("dotenv").config({ path: "./src/credentials/.env" });
 
 async function twitchApi(endpoint, body) {
+	let bearer;
+
+	if (fs.existsSync("./src/credentials/cache.json")) {
+		const cache = fs.readFileSync("./src/credentials/cache.json");
+		bearer = JSON.parse(cache).bearer;
+		if (!bearer) bearer = await generateBearerToken();
+	} else {
+		bearer = await generateBearerToken();
+	}
+
 	const requestOptions = {
 		method: "get",
 		headers: {
-			Authorization: `Bearer ${process.env.BEARER_TOKEN}`,
+			Authorization: `Bearer ${bearer}`,
 			"Client-id": process.env.CLIENT_ID,
 			"Ratelimit-Reset": "true",
 		},

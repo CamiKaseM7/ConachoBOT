@@ -4,6 +4,7 @@ const handleConnection = require("./handleConnection");
 const handleMessage = require("./handleMessage");
 const getChatters = require("./getChatters");
 const getConnectedChannels = require("./getConnectedChannels");
+const sleep = require("./sleep");
 
 module.exports = {
 	getUserFollows: getUserFollows,
@@ -12,4 +13,5 @@ module.exports = {
 	handleMessage: handleMessage,
 	getChatters: getChatters,
 	getConnectedChannels: getConnectedChannels,
+	sleep: sleep,
 };
