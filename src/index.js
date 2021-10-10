@@ -4,6 +4,7 @@ const {
 	handleConnection,
 	handleMessage,
 	getConnectedChannels,
+	sleep,
 } = require("./utils/index");
 
 require("dotenv").config({ path: "./src/credentials/.env" });
@@ -16,12 +17,11 @@ require("dotenv").config({ path: "./src/credentials/.env" });
 	const connectedChannels = [];
 
 	channels.forEach((channel) => {
-		if (channel.connected) connectedChannels.push(channel.name);
+		if (channel.connected) connectedChannels.push(`#${channel.name}`);
 	});
 
 	console.log("Done searching connected channels");
 	console.log(connectedChannels);
-
 	const client = createClient(connectedChannels);
 
 	client.connect().then(() => {
@@ -42,4 +42,23 @@ require("dotenv").config({ path: "./src/credentials/.env" });
 	client.on("message", (channel, tags, message, self) => {
 		handleMessage(client, target, channel, tags, message, self);
 	});
+
+	const refreshBot = setInterval(async () => {
+		const newConnectedChannels = [];
+		const channels = await getConnectedChannels(target);
+		channels.forEach((channel) => {
+			if (
+				channel.connected &&
+				!connectedChannels.includes(`#${channel.name}`)
+			) {
+				console.log(`Found in ${channel.name}`);
+				connectedChannels.push(`#${channel.name}`);
+				newConnectedChannels.push(`#${channel.name}`);
+			}
+		});
+		for (newConnection of newConnectedChannels) {
+			sleep(2000);
+			client.join(newConnection);
+		}
+	}, 1000 * 60);
 })();
