@@ -10,7 +10,7 @@ const {
 require("dotenv").config({ path: "./src/credentials/.env" });
 
 (async () => {
-	const target = process.env.TARGET;
+	const target = process.env.TARGET.toLowerCase();
 
 	console.log("Searching connected channels");
 	const channels = await getConnectedChannels(target);
